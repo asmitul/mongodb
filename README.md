@@ -8,7 +8,7 @@ docker pull mongo
 ```
 2. create network
 ```bash
-docker create network mongo_network
+docker network create mongo_network
 ```
 3. run container
 

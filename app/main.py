@@ -1,6 +1,7 @@
 import logging
 import os
 from pymongo import MongoClient
+from bson.objectid import ObjectId
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -159,6 +160,8 @@ def find_one_and_update(filter, update):
         raise
     
 if __name__ == "__main__":
+    # find_one({"_id": ObjectId("60a6f3f3a5b4e3b0b4e3b0b4e")})
+    
     # filter = {"age":{"$gt":35}}
     # update = {"$set":{"status":"active"}}
     document = {

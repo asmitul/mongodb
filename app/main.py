@@ -41,7 +41,7 @@ client = MongoClient(f'mongodb://{os.getenv("MONGODB_USER")}:{os.getenv("MONGODB
 db = client[os.getenv("APP_NAME")+os.getenv("MONGODB_DATABASE_NAME")]
 collection = db["mongo_functions"]
 
-def insert_one(document):
+def insert_one(collection, document):
     try:
         result = collection.insert_one(document)
         logger.debug("Inserted document ID: %s" % result.inserted_id)
@@ -50,7 +50,7 @@ def insert_one(document):
         logger.error("Error inserting document: %s" % str(e))
         raise
 
-def insert_many(documents):
+def insert_many(collection, documents):
     try:
         result = collection.insert_many(documents)
         logger.debug(f"Inserted documents ID: {result.inserted_ids}")
@@ -59,7 +59,7 @@ def insert_many(documents):
         logger.error(f"Error inserting documents: {e}")
         raise
 
-def replace_one(filter, replacement):
+def replace_one(collection, filter, replacement):
     try:
         result = collection.replace_one(filter=filter, replacement=replacement)
         logger.debug("Matched Count: {}".format(result.matched_count))
@@ -70,7 +70,7 @@ def replace_one(filter, replacement):
         logger.error("An error occurred: {}".format(str(e)))
         raise
 
-def update_one(filter, update):
+def update_one(collection, filter, update):
     try:
         result = collection.update_one(filter=filter, update=update)
         logger.debug("Matched Count: {}".format(result.matched_count))
@@ -81,7 +81,7 @@ def update_one(filter, update):
         logger.error("An error occurred: {}".format(str(e)))
         raise
 
-def update_many(filter, update):
+def update_many(collection, filter, update):
     # example 
     # filter = {"age":{"$gt":20}}
     # update = {"$set":{"status":"active"}}
@@ -95,7 +95,7 @@ def update_many(filter, update):
         logger.error("An error occurred: {}".format(str(e)))
         raise
 
-def delete_one(filter):
+def delete_one(collection, filter):
     try:
         result = collection.delete_one(filter=filter)
         logger.debug("Deleted Count: {}".format(result.deleted_count))
@@ -104,7 +104,7 @@ def delete_one(filter):
         logger.error("An error occurred: {}".format(str(e)))
         raise
 
-def delete_many(filter):
+def delete_many(collection, filter):
     try:
         result = collection.delete_many(filter=filter)
         logger.debug("Deleted Count: {}".format(result.deleted_count))
@@ -113,7 +113,7 @@ def delete_many(filter):
         logger.error("An error occurred: {}".format(str(e)))
         raise
 
-def find():
+def find(collection):
     try:
         result = collection.find()
         for document in result:
@@ -123,7 +123,7 @@ def find():
         logger.error("An error occurred: {}".format(str(e)))
         raise
 
-def find_one(filter):
+def find_one(collection, filter):
     try:
         result = collection.find_one(filter=filter)
         logger.debug(result)
@@ -132,7 +132,7 @@ def find_one(filter):
         logger.error("An error occurred: {}".format(str(e)))
         raise
 
-def find_one_and_delete(filter):
+def find_one_and_delete(collection, filter):
     try:
         result = collection.find_one_and_delete(filter=filter)
         logger.debug(result) # not find return None , find return document and delete
@@ -141,7 +141,7 @@ def find_one_and_delete(filter):
         logger.error("An error occurred: {}".format(str(e)))
         raise
 
-def find_one_and_replace(filter, replacement):
+def find_one_and_replace(collection, filter, replacement):
     try:
         result = collection.find_one_and_replace(filter=filter, replacement=replacement)
         logger.debug(result)
@@ -150,7 +150,7 @@ def find_one_and_replace(filter, replacement):
         logger.error("An error occurred: {}".format(str(e)))
         raise
 
-def find_one_and_update(filter, update):
+def find_one_and_update(collection, filter, update):
     try:
         result = collection.find_one_and_update(filter=filter, update=update)
         logger.debug(result)
@@ -160,12 +160,12 @@ def find_one_and_update(filter, update):
         raise
     
 if __name__ == "__main__":
-    # find_one({"_id": ObjectId("60a6f3f3a5b4e3b0b4e3b0b4e")})
+    find_one({"_id": ObjectId("60a6f3f3a5b4e3b0b4e3b0b4e")})
     
     # filter = {"age":{"$gt":35}}
     # update = {"$set":{"status":"active"}}
-    document = {
-        "name": "Test20",
-        "age": 35
-    }
-    delete_one(filter=document)
+    # document = {
+    #     "name": "Test20",
+    #     "age": 35
+    # }
+    # delete_one(filter=document)

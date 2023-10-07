@@ -39,11 +39,10 @@ if LOGS_LOCATE == "REMOTE":
 
 client = MongoClient(f'mongodb://{os.getenv("MONGODB_USER")}:{os.getenv("MONGODB_PASSWORD")}@{os.getenv("MONGODB_HOST")}:{os.getenv("MONGODB_PORT")}/?authMechanism=DEFAULT')
 db = client[os.getenv("APP_NAME")+os.getenv("MONGODB_DATABASE_NAME")]
-collection = db["mongo_functions"]
 
 def insert_one(collection, document):
     try:
-        result = collection.insert_one(document)
+        result = db[collection].insert_one(document)
         logger.debug("Inserted document ID: %s" % result.inserted_id)
         return result
     except Exception as e:
@@ -52,7 +51,7 @@ def insert_one(collection, document):
 
 def insert_many(collection, documents):
     try:
-        result = collection.insert_many(documents)
+        result = db[collection].insert_many(documents)
         logger.debug(f"Inserted documents ID: {result.inserted_ids}")
         return result
     except Exception as e:
@@ -61,7 +60,7 @@ def insert_many(collection, documents):
 
 def replace_one(collection, filter, replacement):
     try:
-        result = collection.replace_one(filter=filter, replacement=replacement)
+        result = db[collection].replace_one(filter=filter, replacement=replacement)
         logger.debug("Matched Count: {}".format(result.matched_count))
         logger.debug("Modified Count: {}".format(result.modified_count))
         logger.debug("upserted_id: {}".format(result.upserted_id))
@@ -72,7 +71,7 @@ def replace_one(collection, filter, replacement):
 
 def update_one(collection, filter, update):
     try:
-        result = collection.update_one(filter=filter, update=update)
+        result = db[collection].update_one(filter=filter, update=update)
         logger.debug("Matched Count: {}".format(result.matched_count))
         logger.debug("Modified Count: {}".format(result.modified_count))
         logger.debug("upserted_id: {}".format(result.upserted_id))
@@ -86,7 +85,7 @@ def update_many(collection, filter, update):
     # filter = {"age":{"$gt":20}}
     # update = {"$set":{"status":"active"}}
     try:
-        result = collection.update_many(filter=filter, update=update)
+        result = db[collection].update_many(filter=filter, update=update)
         logger.debug("Matched Count: {}".format(result.matched_count))
         logger.debug("Modified Count: {}".format(result.modified_count))
         logger.debug("upserted_id: {}".format(result.upserted_id))
@@ -97,7 +96,7 @@ def update_many(collection, filter, update):
 
 def delete_one(collection, filter):
     try:
-        result = collection.delete_one(filter=filter)
+        result = db[collection].delete_one(filter=filter)
         logger.debug("Deleted Count: {}".format(result.deleted_count))
         return result
     except Exception as e:
@@ -106,7 +105,7 @@ def delete_one(collection, filter):
 
 def delete_many(collection, filter):
     try:
-        result = collection.delete_many(filter=filter)
+        result = db[collection].delete_many(filter=filter)
         logger.debug("Deleted Count: {}".format(result.deleted_count))
         return result
     except Exception as e:
@@ -115,7 +114,7 @@ def delete_many(collection, filter):
 
 def find(collection):
     try:
-        result = collection.find()
+        result = db[collection].find()
         for document in result:
             logger.debug(document)
         return result
@@ -125,7 +124,7 @@ def find(collection):
 
 def find_one(collection, filter):
     try:
-        result = collection.find_one(filter=filter)
+        result = db[collection].find_one(filter=filter)
         logger.debug(result)
         return result
     except Exception as e:
@@ -134,7 +133,7 @@ def find_one(collection, filter):
 
 def find_one_and_delete(collection, filter):
     try:
-        result = collection.find_one_and_delete(filter=filter)
+        result = db[collection].find_one_and_delete(filter=filter)
         logger.debug(result) # not find return None , find return document and delete
         return result
     except Exception as e:
@@ -143,7 +142,7 @@ def find_one_and_delete(collection, filter):
 
 def find_one_and_replace(collection, filter, replacement):
     try:
-        result = collection.find_one_and_replace(filter=filter, replacement=replacement)
+        result = db[collection].find_one_and_replace(filter=filter, replacement=replacement)
         logger.debug(result)
         return result
     except Exception as e:
@@ -152,7 +151,7 @@ def find_one_and_replace(collection, filter, replacement):
 
 def find_one_and_update(collection, filter, update):
     try:
-        result = collection.find_one_and_update(filter=filter, update=update)
+        result = db[collection].find_one_and_update(filter=filter, update=update)
         logger.debug(result)
         return result
     except Exception as e:
